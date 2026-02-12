@@ -1,4 +1,3 @@
-import React from 'react';
 import { Home, Building2, Ruler } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../store/store';

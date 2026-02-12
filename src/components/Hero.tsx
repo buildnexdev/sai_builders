@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 // Import images from assets
 import bg1 from '../assets/construction-site-silhouettes_1127-3253.avif';
