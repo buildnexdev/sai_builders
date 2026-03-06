@@ -20,7 +20,7 @@ const LoadingScreen = () => {
         </h1>
         <div className="mt-2 h-1 w-0 bg-brand-secondary mx-auto animate-loading-bar"></div>
         <p className="mt-4 text-gray-400 text-sm tracking-widest uppercase font-light">
-          Building Excellence
+          Building Your Dreams Into Reality
         </p>
       </div>
 

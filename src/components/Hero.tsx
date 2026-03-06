@@ -1,15 +1,55 @@
 import { useState, useEffect } from 'react';
-
-// Import images from assets
-import bg1 from '../assets/construction-site-silhouettes_1127-3253.avif';
-import bg2 from '../assets/download (1).jpg';
-import bg3 from '../assets/download.jpg';
+import { API_URL, Img_Url } from '../store/api';
 
 const Hero = () => {
-    const images = [bg1, bg2, bg3];
+    const [images, setImages] = useState<string[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
+        const fetchBanners = async () => {
+            try {
+                const companyId = 2;
+                // Append '?category=YourCategory' to the URL if you need a specific category
+                const response = await fetch(`${API_URL}active/banners/${companyId}?category=Builders`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const jsonResponse = await response.json();
+
+                    let extractedImages: string[] = [];
+                    // Check if the structure matches the provided backend: { success: true, data: [...] }
+                    if (jsonResponse.success && Array.isArray(jsonResponse.data)) {
+                        extractedImages = jsonResponse.data.map((item: any) => {
+                            const imgPath = item.imagePath || item.imageUrl || item.image || item.path;
+                            if (imgPath) {
+                                // Prepend the S3 base URL if the path is relative
+                                return imgPath.startsWith('http') ? imgPath : `${Img_Url}${imgPath}`;
+                            }
+                            return '';
+                        });
+                    }
+
+                    // Filter out any empty strings and slice to get max 5 images
+                    extractedImages = extractedImages.filter(img => img).slice(0, 5);
+
+                    if (extractedImages.length > 0) {
+                        setImages(extractedImages);
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to fetch banner images:', error);
+            }
+        };
+
+        fetchBanners();
+    }, []);
+
+    useEffect(() => {
+        if (images.length === 0) return;
         const interval = setInterval(() => {
             setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
         }, 10000); // 10 seconds
@@ -24,7 +64,7 @@ const Hero = () => {
                 {images.map((img, index) => (
                     <div
                         key={index}
-                        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100' : 'opacity-0'
+                        className={`absolute inset-0 transition-opacity duration-7000 ease-in-out ${index === currentIndex ? 'opacity-100' : 'opacity-0'
                             }`}
                     >
                         <img
@@ -55,7 +95,7 @@ const Hero = () => {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4">
-                        <a href="#contact" className="bg-brand-secondary hover:bg-orange-600 text-white text-center px-8 py-4 rounded font-bold uppercase tracking-wider transition-all transform hover:-translate-y-1 shadow-lg shadow-orange-500/30">
+                        <a href="#contact" className="bg-brand-accent hover:bg-red-700 text-white text-center px-8 py-4 rounded font-bold uppercase tracking-wider transition-all transform hover:-translate-y-1 shadow-lg shadow-red-500/30">
                             Get A Quote
                         </a>
                         <a href="#projects" className="border-2 border-white hover:bg-white hover:text-brand-primary text-white text-center px-8 py-4 rounded font-bold uppercase tracking-wider transition-all">

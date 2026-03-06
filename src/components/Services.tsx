@@ -1,6 +1,7 @@
 import { Home, Building2, Ruler } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../store/store';
+import { Img_Url } from '../store/api';
 
 const Services = () => {
     const services = useSelector((state: RootState) => state.content.services);
@@ -25,20 +26,17 @@ const Services = () => {
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-8">
-                    {services.map((service, idx) => (
+                    {services.map((service: { imageUrl: string; title: string; description: string }, idx: number) => (
                         <div key={idx} className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow">
-                            <div className="h-48 overflow-hidden">
-                                <img src={service.img} alt={service.title} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+                            <div className="h-64 overflow-hidden">
+                                <img src={Img_Url + service.imageUrl} alt={service.title} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
                             </div>
                             <div className="p-8">
                                 <div className="w-12 h-12 bg-brand-secondary/10 rounded-lg flex items-center justify-center text-brand-secondary mb-4">
                                     {getIcon(idx)}
                                 </div>
                                 <h3 className="text-xl font-bold text-brand-primary mb-3">{service.title}</h3>
-                                <p className="text-gray-600 mb-6 text-sm leading-relaxed">{service.desc}</p>
-                                <button className="px-6 py-2 bg-brand-primary text-white text-sm font-semibold rounded hover:bg-brand-secondary transition-colors">
-                                    Learn More
-                                </button>
+                                <p className="text-gray-600 mb-6 text-sm leading-relaxed">{service.description}</p>
                             </div>
                         </div>
                     ))}

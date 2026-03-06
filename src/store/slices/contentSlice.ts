@@ -1,33 +1,53 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { API_URL } from '../api';
 
+export const fetchServices = createAsyncThunk(
+    'content/fetchServices',
+    async (companyId: string | number = 2) => {
+        const response = await fetch(`${API_URL}active/services/${companyId}`);
+        if (!response.ok) throw new Error('Failed to fetch services');
+        const jsonResponse = await response.json();
+        return jsonResponse.success && Array.isArray(jsonResponse.data) ? jsonResponse.data : (Array.isArray(jsonResponse) ? jsonResponse : []);
+    }
+);
 
-const initialState = {
+export const fetchProjects = createAsyncThunk(
+    'content/fetchProjects',
+    async (companyId: string | number = 2) => {
+        const response = await fetch(`${API_URL}active/projects/${companyId}`);
+        if (!response.ok) throw new Error('Failed to fetch projects');
+        const jsonResponse = await response.json();
+        return jsonResponse.success && Array.isArray(jsonResponse.data) ? jsonResponse.data : (Array.isArray(jsonResponse) ? jsonResponse : []);
+    }
+);
+
+export const fetchBlogs = createAsyncThunk(
+    'content/fetchBlogs',
+    async (companyId: string | number = 2) => {
+        const response = await fetch(`${API_URL}active/blogs/${companyId}`);
+        if (!response.ok) throw new Error('Failed to fetch blogs');
+        const jsonResponse = await response.json();
+        return jsonResponse.success && Array.isArray(jsonResponse.data) ? jsonResponse.data : (Array.isArray(jsonResponse) ? jsonResponse : []);
+    }
+);
+
+// Fetch all data at the same time
+export const fetchAllContent = createAsyncThunk(
+    'content/fetchAllContent',
+    async (companyId: string | number = 2, { dispatch }) => {
+        await Promise.all([
+            dispatch(fetchServices(companyId)),
+            dispatch(fetchProjects(companyId)),
+            dispatch(fetchBlogs(companyId))
+        ]);
+        return true;
+    }
+);
+
+const initialState: any = {
     logo: localStorage.getItem('company_logo') || '', // Persist logo
-    services: [
-        {
-            title: 'Residential Construction',
-            desc: 'Building custom homes that reflect your lifestyle and personality. From design to key handover.',
-            img: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b91d?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'
-        },
-        {
-            title: 'Commercial Projects',
-            desc: 'Efficient and professional construction solutions for offices, retail spaces, and industrial facilities.',
-            img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'
-        },
-        {
-            title: 'Renovations & Remodeling',
-            desc: 'Transforming existing spaces into modern, functional environments with minimum disruption.',
-            img: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'
-        }
-    ],
-    projects: [
-        { id: 1, category: 'Residential', title: 'Modern Villa', img: 'https://images.unsplash.com/photo-1600585154340-be6199f7d009?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80' },
-        { id: 2, category: 'Commercial', title: 'City Office Complex', img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80' },
-        { id: 3, category: 'Renovations', title: 'Heritage Restoration', img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80' },
-        { id: 4, category: 'Residential', title: 'Luxury Apartments', img: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80' },
-        { id: 5, category: 'Commercial', title: 'Tech Park', img: 'https://images.unsplash.com/photo-1464938050520-ef2270bb8ce8?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80' },
-        { id: 6, category: 'Renovations', title: 'Kitchen Remodel', img: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80' },
-    ],
+    services: [],
+    projects: [],
     // testimonials: [
     //     {
     //         name: 'Robert Miller',
@@ -48,29 +68,7 @@ const initialState = {
     //         rating: 5,
     //     },
     // ],
-    blogPosts: [
-        {
-            title: 'Top 10 Home Renovation Trends for 2026',
-            date: 'Feb 10, 2026',
-            author: 'Admin',
-            img: 'https://images.unsplash.com/photo-1484154218962-a1c002085d2f?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
-            excerpt: 'Discover the latest styles and technologies shaping modern homes this year.',
-        },
-        {
-            title: 'Sustainable Building Materials Explained',
-            date: 'Jan 25, 2026',
-            author: 'Expert',
-            img: 'https://images.unsplash.com/photo-1590059390047-5804ee5d3904?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
-            excerpt: 'How choices in materials can impact the environment and your long-term costs.',
-        },
-        {
-            title: 'Understanding Commercial Construction Permits',
-            date: 'Jan 10, 2026',
-            author: 'Legal',
-            img: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
-            excerpt: 'A comprehensive guide to navigating the complex world of building permits.',
-        }
-    ],
+    blogPosts: [],
     team: [
         { name: 'Noun Sattes', role: 'Founder & CEO', img: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80' },
         { name: 'Mone Mapt', role: 'Chief Architect', img: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80' },
@@ -93,6 +91,18 @@ const contentSlice = createSlice({
             localStorage.setItem('company_logo', action.payload);
         }
     },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchServices.fulfilled, (state, action) => {
+                state.services = action.payload;
+            })
+            .addCase(fetchProjects.fulfilled, (state, action) => {
+                state.projects = action.payload;
+            })
+            .addCase(fetchBlogs.fulfilled, (state, action) => {
+                state.blogPosts = action.payload;
+            });
+    }
 });
 
 export const { setLogo } = contentSlice.actions;

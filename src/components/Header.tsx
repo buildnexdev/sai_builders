@@ -31,8 +31,8 @@ const Header = () => {
     return (
         <header
             className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out py-4 ${isScrolled
-                    ? 'bg-brand-primary/80 backdrop-blur-lg shadow-lg py-3'
-                    : 'bg-transparent py-6'
+                ? 'bg-brand-primary/80 backdrop-blur-lg shadow-lg py-3'
+                : 'bg-transparent py-6'
                 }`}
         >
             <div className="container mx-auto px-6 md:px-12 flex justify-between items-center transition-all duration-500">
@@ -47,7 +47,7 @@ const Header = () => {
                                     } w-auto object-contain hover:scale-105`}
                             />
                         ) : (
-                            <div className="w-12 h-12 bg-gradient-to-br from-brand-secondary to-orange-600 rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-lg transform group-hover:rotate-12 transition-transform">
+                            <div className="w-12 h-12 bg-gradient-to-br from-brand-secondary to-teal-600 rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-lg transform group-hover:rotate-12 transition-transform">
                                 SB
                             </div>
                         )}
@@ -81,7 +81,7 @@ const Header = () => {
 
                     <a
                         href="#contact"
-                        className="relative overflow-hidden bg-brand-secondary hover:bg-orange-600 text-white px-7 py-3 rounded-lg text-sm font-bold transition-all shadow-md hover:shadow-orange-500/30 active:scale-95 group"
+                        className="relative overflow-hidden bg-brand-accent hover:bg-red-700 text-white px-7 py-3 rounded-lg text-sm font-bold transition-all shadow-md hover:shadow-red-500/30 active:scale-95 group"
                     >
                         <span className="relative z-10 uppercase tracking-wider">Get A Quote</span>
                         <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
@@ -102,8 +102,8 @@ const Header = () => {
             {/* Mobile Menu Overlay */}
             <div
                 className={`lg:hidden fixed inset-x-0 top-[72px] transition-all duration-500 ease-in-out ${isMenuOpen
-                        ? 'opacity-100 translate-y-0 visible'
-                        : 'opacity-0 -translate-y-4 invisible pointer-events-none'
+                    ? 'opacity-100 translate-y-0 visible'
+                    : 'opacity-0 -translate-y-4 invisible pointer-events-none'
                     }`}
             >
                 <div className="mx-4 bg-brand-primary/95 backdrop-blur-2xl rounded-2xl border border-white/10 p-6 flex flex-col gap-5 shadow-2xl overflow-hidden relative">
@@ -123,7 +123,7 @@ const Header = () => {
                     ))}
                     <a
                         href="#contact"
-                        className="bg-brand-secondary text-white text-center py-4 rounded-xl font-bold uppercase tracking-widest text-sm shadow-lg active:scale-95 transition-transform"
+                        className="bg-brand-accent text-white text-center py-4 rounded-xl font-bold uppercase tracking-widest text-sm shadow-lg active:scale-95 transition-transform"
                         onClick={() => setIsMenuOpen(false)}
                     >
                         Get A Quote
