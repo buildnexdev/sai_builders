@@ -29,6 +29,28 @@ const Contact = () => {
 
                     {/* Contact Info & Map */}
                     <div className="space-y-8">
+                        {/* Director Profile */}
+                        <div className="bg-white rounded-2xl shadow-[0_2px_20px_rgb(0,0,0,0.04)] border border-gray-100 p-6 flex flex-col sm:flex-row items-center sm:items-center gap-6 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 group">
+                            <div className="relative flex-shrink-0">
+                                <div className="absolute inset-0 bg-brand-secondary rounded-full opacity-0 group-hover:opacity-10 transform scale-110 transition-all duration-300"></div>
+                                <img
+                                    src="https://ui-avatars.com/api/?name=Karthi&size=150&background=0d9488&color=fff&bold=true"
+                                    alt="Karthi - Director"
+                                    className="w-20 h-20 rounded-full object-cover border-[3px] border-white shadow-sm relative z-10 group-hover:scale-105 transition-transform duration-300"
+                                />
+                            </div>
+
+                            <div className="flex-1 text-center sm:text-left">
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-1.5">
+                                    <h3 className="text-2xl font-bold text-gray-900 tracking-tight">Karthi</h3>
+                                    <span className="inline-block px-3 py-1 bg-brand-secondary/10 text-brand-secondary text-[10px] font-bold uppercase tracking-widest rounded-full w-max mx-auto sm:mx-0">
+                                        Leadership
+                                    </span>
+                                </div>
+                                <p className="text-brand-secondary font-semibold text-sm tracking-wider uppercase">Director</p>
+                            </div>
+                        </div>
+
                         <div className="grid sm:grid-cols-2 gap-6">
                             <div className="flex items-start gap-4">
                                 <MapPin className="text-brand-secondary flex-shrink-0" />

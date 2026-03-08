@@ -104,7 +104,7 @@ const Footer = () => {
                 <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-center items-center gap-4 text-gray-500 text-xs">
                     <p>&copy; {new Date().getFullYear()} Sai Builders. All rights reserved.</p>
                     <p className="flex items-center gap-2">
-                        Designed with <Heart size={14} className="text-red-500 animate-pulse" fill="currentColor" /> by <span className="text-white font-semibold"><a href="https://bulidnex.xyz/" target="_blank" rel="noopener noreferrer">BuildNexDev</a></span>
+                        Designed with <Heart size={14} className="text-red-500 animate-pulse" fill="currentColor" /> by <span className="text-white font-semibold"><a href="http://buildnexdev.co.in/" target="_blank" rel="noopener noreferrer">BuildNexDev</a></span>
                     </p>
                 </div>
             </div>
