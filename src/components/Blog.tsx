@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '../store/store';
 import { Img_Url } from '../store/api';
 
+const FALLBACK_BLOG_IMAGE = 'data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22800%22%20height%3D%22500%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%231e293b%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20fill%3D%22%2394a3b8%22%20font-size%3D%2222%22%20font-family%3D%22sans-serif%22%20text-anchor%3D%22middle%22%20dy%3D%22.3em%22%3ESai%20Builders%20Blog%3C%2Ftext%3E%3C%2Fsvg%3E';
+
 const Blog = () => {
     const posts = useSelector((state: RootState) => state.content.blogPosts);
 
@@ -19,10 +21,13 @@ const Blog = () => {
                         <div key={post.id || idx} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow group">
                             <div className="h-48 overflow-hidden bg-gray-100">
                                 <img
-                                    src={post.imageUrl ? (post.imageUrl.startsWith('http') ? post.imageUrl : `${Img_Url}${post.imageUrl}`) : 'https://images.unsplash.com/photo-1541888081622-4a0b2eb307c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'}
+                                    src={post.imageUrl && !post.imageUrl.startsWith('images/') ? (post.imageUrl.startsWith('http') ? post.imageUrl : `${Img_Url}${post.imageUrl}`) : FALLBACK_BLOG_IMAGE}
                                     alt={post.title || 'Blog Post'}
                                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                    onError={(e: any) => { e.target.src = 'https://images.unsplash.com/photo-1541888081622-4a0b2eb307c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'; }}
+                                    onError={(e: any) => {
+                                        e.currentTarget.onerror = null;
+                                        e.currentTarget.src = FALLBACK_BLOG_IMAGE;
+                                    }}
                                 />
                             </div>
                             <div className="p-6">

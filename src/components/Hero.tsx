@@ -85,6 +85,10 @@ const Hero = () => {
                             src={banner.imageUrl}
                             alt={banner.title || `Construction Site ${index + 1}`}
                             className="w-full h-full object-cover"
+                            onError={(e: any) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.style.display = 'none';
+                            }}
                         />
                     </div>
                 ))}
