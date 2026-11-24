@@ -29,7 +29,12 @@ const Services = () => {
                     {services.map((service: { imageUrl: string; title: string; description: string }, idx: number) => (
                         <div key={idx} className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow">
                             <div className="h-64 overflow-hidden">
-                                <img src={Img_Url + service.imageUrl} alt={service.title} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+                                <img
+                                    src={service.imageUrl ? (service.imageUrl.startsWith('http') ? service.imageUrl : `${Img_Url}${service.imageUrl}`) : 'https://placehold.co/600x400/eeeeee/999999?text=Image+Not+Found'}
+                                    alt={service.title}
+                                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                                    onError={(e: any) => { e.target.src = 'https://placehold.co/600x400/eeeeee/999999?text=Image+Not+Found' }}
+                                />
                             </div>
                             <div className="p-8">
                                 <div className="w-12 h-12 bg-brand-secondary/10 rounded-lg flex items-center justify-center text-brand-secondary mb-4">

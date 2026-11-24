@@ -1,16 +1,23 @@
 import { useState, useEffect } from 'react';
 import { API_URL, Img_Url } from '../store/api';
 
+interface BannerItem {
+    id: number;
+    imageUrl: string;
+    title?: string | null;
+    subtitle?: string | null;
+}
+
 const Hero = () => {
-    const [images, setImages] = useState<string[]>([]);
+    const [banners, setBanners] = useState<BannerItem[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
         const fetchBanners = async () => {
             try {
                 const companyId = 2;
-                // Append '?category=YourCategory' to the URL if you need a specific category
-                const response = await fetch(`${API_URL}active/banners/${companyId}?category=Builders`, {
+                // Fetch active banners for company
+                const response = await fetch(`${API_URL}active/banners/${companyId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -20,24 +27,29 @@ const Hero = () => {
                 if (response.ok) {
                     const jsonResponse = await response.json();
 
-                    let extractedImages: string[] = [];
-                    // Check if the structure matches the provided backend: { success: true, data: [...] }
                     if (jsonResponse.success && Array.isArray(jsonResponse.data)) {
-                        extractedImages = jsonResponse.data.map((item: any) => {
-                            const imgPath = item.imagePath || item.imageUrl || item.image || item.path;
-                            if (imgPath) {
-                                // Prepend the S3 base URL if the path is relative
-                                return imgPath.startsWith('http') ? imgPath : `${Img_Url}${imgPath}`;
-                            }
-                            return '';
+                        // Prioritize real uploaded banners over dummy seed data (like 'images/hero-construction.jpg')
+                        const realUploads = jsonResponse.data.filter((item: any) => {
+                            const raw = item.imageUrl || item.imagePath || item.image || item.path || '';
+                            return raw && !raw.startsWith('images/');
                         });
-                    }
 
-                    // Filter out any empty strings and slice to get max 5 images
-                    extractedImages = extractedImages.filter(img => img).slice(0, 5);
+                        const listToUse = realUploads.length > 0 ? realUploads : jsonResponse.data;
 
-                    if (extractedImages.length > 0) {
-                        setImages(extractedImages);
+                        const formatted: BannerItem[] = listToUse.map((item: any) => {
+                            const raw = item.imageUrl || item.imagePath || item.image || item.path || '';
+                            const fullUrl = raw.startsWith('http') ? raw : `${Img_Url}${raw}`;
+                            return {
+                                id: item.id,
+                                imageUrl: fullUrl,
+                                title: item.title,
+                                subtitle: item.subtitle,
+                            };
+                        }).filter((b: BannerItem) => b.imageUrl);
+
+                        if (formatted.length > 0) {
+                            setBanners(formatted.slice(0, 5));
+                        }
                     }
                 }
             } catch (error) {
@@ -49,27 +61,29 @@ const Hero = () => {
     }, []);
 
     useEffect(() => {
-        if (images.length === 0) return;
+        if (banners.length <= 1) return;
         const interval = setInterval(() => {
-            setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-        }, 10000); // 10 seconds
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % banners.length);
+        }, 6000); // 6 seconds per slide
 
         return () => clearInterval(interval);
-    }, [images.length]);
+    }, [banners.length]);
+
+    const currentBanner = banners[currentIndex];
 
     return (
         <section className="relative w-full h-screen min-h-[600px] flex items-center overflow-hidden">
             {/* Background Images with Overlay */}
             <div className="absolute inset-0 z-0">
-                {images.map((img, index) => (
+                {banners.map((banner, index) => (
                     <div
-                        key={index}
-                        className={`absolute inset-0 transition-opacity duration-7000 ease-in-out ${index === currentIndex ? 'opacity-100' : 'opacity-0'
+                        key={banner.id || index}
+                        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100' : 'opacity-0'
                             }`}
                     >
                         <img
-                            src={img}
-                            alt={`Construction Site ${index + 1}`}
+                            src={banner.imageUrl}
+                            alt={banner.title || `Construction Site ${index + 1}`}
                             className="w-full h-full object-cover"
                         />
                     </div>
@@ -86,12 +100,18 @@ const Hero = () => {
                     </div>
 
                     <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
-                        Building Your Dreams <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">Into Reality</span>
+                        {currentBanner?.title ? (
+                            currentBanner.title
+                        ) : (
+                            <>
+                                Building Your Dreams <br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">Into Reality</span>
+                            </>
+                        )}
                     </h1>
 
                     <p className="text-xl text-gray-300 mb-10 max-w-2xl font-light">
-                        We are a team of dedicated professionals committed to delivering excellence in every project. From residential to commercial, we build with precision and passion.
+                        {currentBanner?.subtitle || "We are a team of dedicated professionals committed to delivering excellence in every project. From residential to commercial, we build with precision and passion."}
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4">

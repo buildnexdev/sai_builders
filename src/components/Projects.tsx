@@ -47,7 +47,7 @@ const Projects = () => {
                             {/* Image Container */}
                             <div className="relative h-72 w-full overflow-hidden bg-gray-100">
                                 <img
-                                    src={Img_Url + project.imageUrl}
+                                    src={project.imageUrl ? (project.imageUrl.startsWith('http') ? project.imageUrl : `${Img_Url}${project.imageUrl}`) : 'https://placehold.co/600x400/eeeeee/999999?text=Image+Not+Found'}
                                     alt={project.title}
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                     onError={(e: any) => { e.target.src = 'https://placehold.co/600x400/eeeeee/999999?text=Image+Not+Found' }}

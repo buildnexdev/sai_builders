@@ -19,9 +19,10 @@ const Blog = () => {
                         <div key={post.id || idx} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow group">
                             <div className="h-48 overflow-hidden bg-gray-100">
                                 <img
-                                    src={Img_Url + post.imageUrl || 'https://images.unsplash.com/photo-1541888081622-4a0b2eb307c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'}
+                                    src={post.imageUrl ? (post.imageUrl.startsWith('http') ? post.imageUrl : `${Img_Url}${post.imageUrl}`) : 'https://images.unsplash.com/photo-1541888081622-4a0b2eb307c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'}
                                     alt={post.title || 'Blog Post'}
                                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    onError={(e: any) => { e.target.src = 'https://images.unsplash.com/photo-1541888081622-4a0b2eb307c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'; }}
                                 />
                             </div>
                             <div className="p-6">
